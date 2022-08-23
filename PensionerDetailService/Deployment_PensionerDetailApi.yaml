@@ -6,21 +6,21 @@ metadata:
     app: PensionerDetailService
 spec:
   replicas: 1
-    selector:
-	  matchLabels:
+  selector:
+    matchLabels:
+	  app: PensionerDetailService
+  template:
+    metadata:
+	  labels:
 	    app: PensionerDetailService
-	template:
-	  metadata:
-	    labels:
-		  app: PensionerDetailService
-		spec:
-		  containers:
-		  -	name: pensionerdetailservice
-		    image: pmscr.azurecr.io/pensionerdetailmicroserviceimage:latest
-			ports:
-			- containerPort: 8080
-			imagePullSecrets:
-			- name: pensionmanagementsvcsecret
+	spec:
+	  containers:
+	  -	name: pensionerdetailservice
+	    image: pmscr.azurecr.io/pensionerdetailmicroserviceimage:latest
+		ports:
+		- containerPort: 8080
+		imagePullSecrets:
+		- name: pensionmanagementsvcsecret
 ---
 apiVersion: v1
 kind: Service
@@ -28,7 +28,7 @@ metadata:
   name: pensionerdetailservicesvc
 spec:
   type: LoadBalancer
-	ports:
-	- port: 80
-	selector:
-	  app: PensionerDetailService
+  ports:
+  - port: 80
+  selector:
+    app: PensionerDetailService
