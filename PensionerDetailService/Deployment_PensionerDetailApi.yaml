@@ -1,34 +1,40 @@
 ﻿apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: "pensionerdetailservice-deployment"
+  name: pensionerdetailservice-deployment 
   labels:
-    app: PensionerDetailService
+    app: PensionerDetailService 
 spec:
   replicas: 1
   selector:
     matchLabels:
-	  app: PensionerDetailService
+      app: PensionerDetailService
   template:
     metadata:
-	  labels:
-	    app: PensionerDetailService
-	spec:
-	  containers:
-	  -	name: pensionerdetailservice
-	    image: pmscr.azurecr.io/pensionerdetailmicroserviceimage:latest
-		ports:
-		- containerPort: 8080
-		imagePullSecrets:
-		- name: pensionmanagementsvcsecret
+      labels:
+        app: PensionerDetailService
+    spec:
+      containers:
+      - name: pensionerdetailservice
+        image: pmscr.azurecr.io/pensionerdetailmicroserviceimage:latest
+        resources:
+        env:
+           - name: ConnectionString
+             value: Server = "tcp:authpension.database.windows.net,1433; Initial Catalog = MSONEPensionDb; Persist Security Info = False; User ID = pension; Password = Subhadip@1202; MultipleActiveResultSets = False; Encrypt = True; TrustServerCertificate = False; Connection Timeout = 30;"
+        ports:
+        - containerPort: 8080
+      imagePullSecrets:
+        - name: pensionmanagementsvcsecret  
 ---
+
+
 apiVersion: v1
 kind: Service
 metadata:
   name: pensionerdetailservicesvc
 spec:
   type: LoadBalancer
-  ports:
-  - port: 80
   selector:
     app: PensionerDetailService
+  ports:
+  - port: 80
