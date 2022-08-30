@@ -15,6 +15,7 @@ namespace PensionerDetailService.Controllers
     public class PensionerDetailController : Controller
     {
         IPensionerDetailMicroservice pensionerDetailService;
+        private readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         public PensionerDetailController(IPensionerDetailMicroservice pensionerDetailService)
         {
             this.pensionerDetailService = pensionerDetailService;
@@ -25,6 +26,7 @@ namespace PensionerDetailService.Controllers
         public async Task<ActionResult<List<PensionerDetail>>> GetAllPensionerDetails()
         {
             IList<PensionerDetail> pensionerDetails = await pensionerDetailService.GetAllPensionerDetails();
+            log.Info("Got all pensioner details in Pensioner detail controller");
             return Ok(pensionerDetails);
         }
 
@@ -34,6 +36,7 @@ namespace PensionerDetailService.Controllers
         public async Task<ActionResult<PensionerDetail>> GetPensionerDetail(String Aadhar)
         {
             PensionerDetail pensioner = await pensionerDetailService.GetPensionerDetail(Aadhar);
+            log.Info("Got pensioner details in Pensioner detail controller");
             return Ok(pensioner);
         }
     }
